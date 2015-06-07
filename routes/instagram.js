@@ -20,7 +20,7 @@ module.exports = (function() {
             function(done) {
                 async.map(trends, function(trend, next) {
                     var q = trend.name.charAt(0) == '#' ? trend.name.slice(1) : trend.name;
-                    ig.tag_search(q.replace(/ /g,''), function(err, result, remaining, limit) {
+                    ig.tag_search(q.replace(/ /g, ''), function(err, result, remaining, limit) {
                         if (err) next(err);
                         next(null, result[0]);
                     });
@@ -31,22 +31,11 @@ module.exports = (function() {
             },
             function(trends, done) {
                 async.map(trends, function(trend, next) {
-                    // var init = { count: 33 };
-                    // var post_init = {count: 33, max_tag_id: max_page, min_tag_id: min_page };
-                    // var max_page, min_page;
-                    // async.timesSeries(5, function(n, next) {
-                        ig.tag_media_recent(trend.name, /*(n == 0 ? init : post_init),*/ function(err, medias, pagination, remaining, limit) {
-                            if (err) next(err);
-                            // max_page = pagination.next_max_id;
-                            // min_page = pagination.next_min_id;
-                            // console.log(trend, pagination.next_max_id);
-                            next(null, medias);
-                        });
-                    // }, function(err, results) {
-                    //     if (err) return done(err);
-                    //     done(null, results);
-                    // });
-
+                    ig.tag_media_recent(trend.name, {count: 33}, function(err, medias, pagination, remaining, limit) {
+                        if (err) inner_next(err);
+                        //TODO get last 1000. order by likes.
+                        next(null, medias);
+                    });
                 }, function(err, results) {
                     if (err) return console.error(err);
                     done(null, results);
