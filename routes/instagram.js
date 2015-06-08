@@ -34,7 +34,7 @@ module.exports = (function() {
                     var max_page;
                     var init = { count: 33 };
                     var post_init = { count: 33, max_tag_id: max_page };
-                    async.timesSeries(5, function(n, inner_next) {
+                    async.timesSeries(1, function(n, inner_next) {
                         ig.tag_media_recent(trend.name, ( n === 0 ? init: post_init), function(err, medias, pagination, remaining, limit) {
                             if (err) inner_next(err);
                             //TODO get last 1000. order by likes.
@@ -46,7 +46,13 @@ module.exports = (function() {
                         });
                     }, function(err, results) {
                         if (err) return next(err);
-                        next(null, results);
+                        next(null, {
+                                     trend: trend.name,
+                                     pictures: _.chain(results)
+                                                .flatten()
+                                                .uniq()
+                                   }
+                        );
                     });
 
                 }, function(err, results) {
