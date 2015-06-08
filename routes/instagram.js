@@ -32,32 +32,52 @@ module.exports = (function() {
             function(trends, done) {
                 async.map(trends, function(trend, next) {
                     var max_page;
-                    var init = { count: 33 };
-                    var post_init = { count: 33, max_tag_id: max_page };
-                    async.timesSeries(1, function(n, inner_next) {
-                        ig.tag_media_recent(trend.name, ( n === 0 ? init: post_init), function(err, medias, pagination, remaining, limit) {
-                            if (err) inner_next(err);
-                            //TODO get last 1000. order by likes.
-                            // getting the 5 iterations of the same items.
-                            // cant displace by next_max_id like expected
-                            max_page = pagination.next_max_id;
-                            console.log(trend.name, max_page, pagination);
-                            inner_next(null, medias);
-                        });
+                    var init = {
+                        count: 33
+                    };
+                    var post_init = {
+                        count: 33,
+                        max_tag_id: max_page
+                    };
+                    // (n === 0 ? init : post_init)
+                    async.timesSeries(5, function(n, inner_next) {
+                        if (n === 0) {
+                            ig.tag_media_recent(trend.name, {count: 33}, function(err, medias, pagination, remaining, limit) {
+                                if (err) inner_next(err);
+                                //TODO get last 1000. order by likes.
+                                // getting the 5 iterations of the same items.
+                                // cant displace by next_max_id like expected
+                                max_page = pagination.next_max_id;
+                                console.log(trend.name, max_page);
+                                inner_next(null, medias);
+                            });
+                        } else {
+                            ig.tag_media_recent(trend.name, {count: 33, max_tag_id: max_page}, function(err, medias, pagination, remaining, limit) {
+                                if (err) inner_next(err);
+                                //TODO get last 1000. order by likes.
+                                // getting the 5 iterations of the same items.
+                                // cant displace by next_max_id like expected
+                                max_page = pagination.next_max_id;
+                                console.log(trend.name, max_page);
+                                inner_next(null, medias);
+                            });
+                        }
                     }, function(err, results) {
                         if (err) return next(err);
                         next(null, {
-                                     trend: trend.name,
-                                     pictures: _.chain(results)
-                                                .flatten()
-                                                .uniq()
-                                   }
-                        );
+                            trend: trend.name,
+                            pictures: _.chain(results)
+                                .flatten()
+                                .uniq()
+                                .value()
+                        });
                     });
 
                 }, function(err, results) {
                     if (err) return console.error(err);
-                    done(null, results);
+                    done(null, _.filter(results, function(item) {
+                        return item.pictures.length !== 0;
+                    }));
                 });
             }
         ], function(err, results) {
