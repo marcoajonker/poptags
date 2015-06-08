@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
     twitter.trends(function(err, trends) {
         if (err) console.error(err);
         world_trends = trends;
-        console.log(trends);
+        // console.log(trends);
             instagram.pictures(trends, function(err, pictures) {
                 if (err) console.error(err);
                 res.send(pictures);

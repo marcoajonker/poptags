@@ -32,7 +32,7 @@ module.exports = (function() {
             function(trends, done) {
                 async.map(trends, function(trend, next) {
                     var max_page, params;
-                    async.timesSeries(5, function(n, inner_next) {
+                    async.timesSeries(50, function(n, inner_next) {
                         params = {
                             count: 33,
                             max_tag_id: max_page
@@ -40,7 +40,6 @@ module.exports = (function() {
                         if (n === 0) params = { count: 33 };
                         ig.tag_media_recent(trend.name, params, function(err, medias, pagination, remaining, limit) {
                             if (err) inner_next(err);
-                            //TODO get last 1000. order by likes.
                             max_page = pagination.next_max_id;
                             inner_next(null, medias);
                         });
@@ -51,9 +50,11 @@ module.exports = (function() {
                             pictures: _.chain(results)
                                 .flatten()
                                 .uniq('link')
+                                // get top 100 liked item from last 50 reqs
                                 .sortBy(function(item) {
                                     return -(item.likes.count);
                                 })
+                                .take(100)
                                 .value()
                         });
                     });
