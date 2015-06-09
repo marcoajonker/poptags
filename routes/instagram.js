@@ -15,10 +15,11 @@ module.exports = (function() {
     };
 
     function pictures(trends, done) {
-        var trend_pics;
         async.waterfall([
             function(done) {
+                // for each twitter trend get the most popular related instagram #
                 async.map(trends, function(trend, next) {
+                    // prep trends for instagram search
                     var q = trend.name.charAt(0) == '#' ? trend.name.slice(1) : trend.name;
                     ig.tag_search(q.replace(/ /g, ''), function(err, result, remaining, limit) {
                         if (err) next(err);
@@ -26,18 +27,18 @@ module.exports = (function() {
                     });
                 }, function(err, results) {
                     if (err) return console.error(err);
-                    done(null, _.compact(results));
+                    done(null, _.compact(results)); // remove null content
                 });
             },
-            function(trends, done) {
-                async.map(trends, function(trend, next) {
+            function(ig_tags, done) {
+                async.map(ig_tags, function(trend, next) {
                     var max_page, params;
                     async.timesSeries(50, function(n, inner_next) {
                         params = {
                             count: 33,
                             max_tag_id: max_page
                         };
-                        if (n === 0) params = { count: 33 };
+                        if (n === 0) params = { count: 33 }; // first req doesn't use pages
                         ig.tag_media_recent(trend.name, params, function(err, medias, pagination, remaining, limit) {
                             if (err) inner_next(err);
                             max_page = pagination.next_max_id;
