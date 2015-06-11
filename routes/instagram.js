@@ -22,7 +22,7 @@ module.exports = (function() {
                     // prep trends for instagram search
                     var q = trend.name.charAt(0) == '#' ? trend.name.slice(1) : trend.name;
                     ig.tag_search(q.replace(/ /g, ''), function(err, result, remaining, limit) {
-                        if (err) next(err);
+                        if (err) return next(err);
                         next(null, result[0]);
                     });
                 }, function(err, results) {
@@ -40,7 +40,7 @@ module.exports = (function() {
                         };
                         if (n === 0) params = { count: 33 }; // first req doesn't use pages
                         ig.tag_media_recent(trend.name, params, function(err, medias, pagination, remaining, limit) {
-                            if (err) inner_next(err);
+                            if (err) return inner_next(err);
                             max_page = pagination.next_max_id;
                             inner_next(null, medias);
                         });

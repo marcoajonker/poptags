@@ -16,20 +16,20 @@ twitter.trends(function(err, trends) {
     instagram.pictures(world_trends, function(err, pictures) {
         if (err) console.error(err);
         ig_pics = pictures;
-        console.log(ig_pics);
+        // console.log(ig_pics);
     });
     setInterval(function() {
         instagram.pictures(trends, function(err, pictures) {
             if (err) console.error(err);
             ig_pics = pictures;
-            console.log(ig_pics);
+            // console.log(ig_pics);
         });
     }, 90000);
     setInterval(function() {
         twitter.trends(function(err, trends) {
             if (err) console.error(err);
             world_trends = trends;
-            console.log(world_trends);
+            // console.log(world_trends);
         });
     }, 100000);
 });
