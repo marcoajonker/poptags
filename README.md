@@ -15,7 +15,3 @@ returns top tweets worldwide
 instagram.js
 ------
 gets instagram photos using the trending twitter topics.
-
-yahoo.js
-------
-was using this for location searches, but not using it anymore. still chillin here until i figure out if im going to keep it or not.
