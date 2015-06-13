@@ -1,6 +1,5 @@
 var express = require('express'),
     twitter = require('./twitter'),
-    yahoo = require('./yahoo'),
     instagram = require('./instagram');
 var router = express.Router();
 
