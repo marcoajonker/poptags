@@ -1,4 +1,5 @@
 var express = require('express'),
+    async = require('async'),
     twitter = require('./twitter'),
     instagram = require('./instagram');
 var router = express.Router();
@@ -8,6 +9,53 @@ var world_trends, ig_pics;
 router.get('/', function(req, res, next) {
     res.send(ig_pics);
 });
+
+var INTERVAL = 100000;
+
+/* A few alternate solutions: */
+
+/*
+ * (1) Using an Interval
+ */
+/*
+function feed_twitter_into_instagram_in_interval() {
+    async.waterfall([twitter.trends, instagram.pictures], function(err, pictures) {
+        if (err) return console.error(err);
+        ig_pics = pictures;
+    });
+}
+setInterval(feed_twitter_into_instagram_in_interval, INTERVAL); // Need to set the interval
+feed_twitter_into_instagram_in_interval();                      // Also, need to call it so it happens now
+*/
+
+/*
+ * (2) Using a timeout and some recursion
+ */
+/*
+function feed_twitter_into_instagram_and_set_timeout() {
+    // We want calling this function again to be independent of the results, so this is outside of the waterfall
+    setTimeout(feed_twitter_into_instagram_and_set_timeout, INTERVAL);
+    async.waterfall([twitter.trends, instagram.pictures], function(err, pictures) {
+        if (err) return console.error(err);
+        ig_pics = pictures;
+    });
+}
+feed_twitter_into_instagram_and_set_timeout(); // Just need to kick it off. It will deal with calling again
+*/
+
+/*
+ * (3) Using async.forever and a timeout
+ */
+/*
+async.forever(function(next) {
+    // We want calling this function again to be independent of the results, so this is outside of the waterfall
+    setTimeout(next, INTERVAL);
+    async.waterfall([twitter.trends, instagram.pictures], function(err, pictures) {
+        if (err) return console.error(err);
+        ig_pics = pictures;
+    });
+});
+*/
 
 twitter.trends(function(err, trends) {
     if (err) console.error(err);

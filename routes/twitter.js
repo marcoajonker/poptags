@@ -1,7 +1,5 @@
 module.exports = (function() {
-    var twit = require('twit'),
-        _ = require('lodash'),
-        async = require('async');
+    var twit = require('twit');
 
     // test keys
     var t = new twit({
