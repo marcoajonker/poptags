@@ -3,7 +3,9 @@
         <div>
             Trends<br>
             <ul>
-                {{}}
+                {% for trend in pics.trends %}
+                <li>{{trend.trend}}</li
+                {% endfor %}
             </ul>
         </div>
     </body>
