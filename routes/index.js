@@ -15,14 +15,14 @@ router.get('/', function(req, res, next) {
 
 var INTERVAL = 100000;
 
-// async.forever(function(next) {
-//     // We want calling this function again to be independent of the results, so this is outside of the waterfall
-//     setTimeout(next, INTERVAL);
-//     async.waterfall([twitter.trends, instagram.pictures], function(err, pictures) {
-//         if (err) return console.error(err);
-//         ig_pics = pictures;
-//     });
-// });
+async.forever(function(next) {
+    // We want calling this function again to be independent of the results, so this is outside of the waterfall
+    setTimeout(next, INTERVAL);
+    async.waterfall([twitter.trends, instagram.pictures], function(err, pictures) {
+        if (err) return console.error(err);
+        ig_pics = pictures;
+    });
+});
 
 
 
