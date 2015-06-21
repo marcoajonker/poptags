@@ -1,12 +1,39 @@
 <html>
+
     <body>
         <div>
-            Trends<br>
-            <ul>
-                {% for trend in pics.trends %}
-                <li>{{trend.trend}}</li
-                {% endfor %}
-            </ul>
+            trends
+            <br>
+            <div>
+                <ul>
+                    {% for trend in pics %}
+                    <li >{{trend.trend}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div>
+            {% for trend in pics %}
+            <div name="{{trend.trend}}">
+                <h2>{{trend.trend}}</h2>
+
+                    {% for pic in trend.pictures %}
+                    <div>
+                        <!-- {% if pic.videos %} -->
+                            <!-- TODO show video image and mark that it can be clicked to open full video -->
+                        <!-- {% else %} -->
+                        <img src="{{pic.images.standard_resolution.url}}" width="{{pics.images.standard_resolution.width}}" height="{{pics.images.standard_resolution.height}}">
+                        <!-- {% endif %} -->
+                        <br> {{ pic.likes.count }}
+                        <br> {{ pic.caption.text }}
+                        <br> {{ pic.user.userame }}
+                        <br>
+                        <a href="{{pic.link}}">instagram</a>
+                    </div>
+                    {% endfor %}
+            </div>
+            {% endfor %}
         </div>
     </body>
+
 </html>
