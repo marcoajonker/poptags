@@ -7,14 +7,14 @@
             <div>
                 <ul>
                     {% for trend in pics %}
-                    <li >{{trend.trend}}</li>
+                    <li ><a href='#{{trend.trend}}'>{{trend.trend}}</a> [{{trend.pictures.length}}]</li>
                     {% endfor %}
                 </ul>
             </div>
         </div>
         <div>
             {% for trend in pics %}
-            <div name="{{trend.trend}}">
+            <div id="{{trend.trend}}" name="{{trend.trend}}">
                 <h2>{{trend.trend}}</h2>
 
                     {% for pic in trend.pictures %}

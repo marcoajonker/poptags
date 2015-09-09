@@ -11,8 +11,8 @@ var template = swig.compileFile('./views/index.html');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    // res.send(template({pics: ig_pics}));
-    res.send({pics: ig_pics});
+    res.send(template({pics: ig_pics}));
+    // res.send({pics: ig_pics});
 });
 
 var INTERVAL = 1000000;
