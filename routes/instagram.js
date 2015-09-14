@@ -34,9 +34,10 @@ module.exports = (function() {
                 function(ig_trend, done) {
                     if (!ig_trend) {
                         return done(null, {
-                            trend: null,
+                            trend: trend.name,
                             pictures: [],
-                            length: 0
+                            url: trend.url,
+                            promoted: trend.promoted_content
                         });
                     }
                     var max_page;
