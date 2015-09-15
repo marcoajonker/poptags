@@ -41,7 +41,7 @@ module.exports = (function() {
                         });
                     }
                     var max_page;
-                    async.timesSeries(50, function(n, inner_next) {
+                    async.timesSeries(20, function(n, inner_next) {
                         var params = {
                             count: 33,
                             max_tag_id: max_page
